@@ -8,6 +8,9 @@ date: "2023-01-12"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+library(tidyverse)
+```
 
 # Reproducibility component: 10 points.
 1. (22 points total, equally weighted) The data set rnf6080.dat records hourly rainfall at a certain location in Canada, every day from 1960 to 1980.
@@ -38,7 +41,7 @@ Using base R, the value at row 2, column 4 can be found with rain.df[2,4].
 
 e. What command would you use to display the whole second row? What is the content of that row?
 ```{r}
-rain.df[2,]
+rain.df[2,] #look at second row
 ```
 rain.df[2,] prints the entire row, as shown above.
 
@@ -51,13 +54,13 @@ This command changes the column names to year, month, day, 0, 1, 2, ..., 23.
 
 g. Create a new column called daily, which is the sum of the 24 hourly columns.
 ```{r}
-rain.df$daily <- rowSums(rain.df[,4:27])
+rain.df$daily <- rowSums(rain.df[,4:27]) #create new column called dailey with sum of columns 4-27
 summary(rain.df$daily)
 ```
 
 h. Give the command you would use to create a histogram of the daily rainfall amounts. Please make sure to attach your figures in your .pdf report.
 ```{r}
-hist(rain.df$daily)
+hist(rain.df$daily) #plot a histogram of the daily column
 ```
 
 i. Explain why that histogram above cannot possibly be right.
@@ -65,45 +68,68 @@ The histogram has negative values, and it is not possible to have negative rainf
 
 j. Give the command you would use to fix the data frame.
 ```{r}
-
+rain.df2 <- rain.df %>% filter(daily >= 0) #keep rows where daily >= 0
 ```
+I would use the filter command in tidyverse to remove rows with negative rainfall.
 
 k. Create a corrected histogram and again include it as part of your submitted report. Explain why it is more reasonable than the previous histogram.
 ```{r}
-
+hist(rain.df2$daily)
 ```
 
+This histogram is more reasonable because all values for amount of rainfall are greater than or equal to 0.
+
 # Data types
-2. (9 points, equally weighted) Make sure your answers to different parts of this problem are compatible
-with each other.
-a. For each of the following commands, either explain why they should be errors, or explain the nonerroneous
-result.
+2. (9 points, equally weighted) Make sure your answers to different parts of this problem are compatible with each other.
+a. For each of the following commands, either explain why they should be errors, or explain the nonerroneous result.
 ```{r}
 x <- c("5","12","7")
 max(x)
-sort(x)
-sum(x)
 ```
+
+Because the values in x are characters, the max function returns the value with the maximum position (the last value). 
+
+```{r}
+sort(x)
+```
+
+The sort function sorts character values in alpha-numeric order.  This means the value starting with 1 goes before 5 and 7.
+
+```{r }
+# sum(x)
+```
+
+R cannot perform mathematical operations on character values, which is why the sum function produces an error.
 
 b. For the next two commands, either explain their results, or why they should produce errors.
 ```{r}
 y <- c("5",7,12)
-y[2] + y[3]
+# y[2] + y[3]
 ```
+```{r}
+typeof(y[2])
+typeof(y[3])
+```
+Because the first argument in y is a character, the remaining elements were read in as characters as well.  Similar to the last question, R cannot perform mathematical operations on character values.
 
 c. For the next two commands, either explain their results, or why they should produce errors.
 ```{r}
-z <- data.frame(z1="5",z2=7,z3=12)
+z <- data.frame(z1="5",z2=7,z3=12) #create data frame with three columns
 z[1,2] + z[1,3]
 ```
 
+The first line creates a data frame with three columns, z1, z2, and z3. The second line performs 7+12.  Because this was made as a data frame, the values in the first column can be different type than the values in the other columns, which is why the numeric values work here and not in the previous example.
+
 3. (3 pts, equally weighted).
 a.) What is the point of reproducible code?
+Reproducible code is crucial in science to allow for repeated analyses and ease of interpretation.
 
 b.) Given an example of why making your code reproducible is important for you to know in this class and
 moving forward.
+Making reproducible code is important to help the TA and professor read and interpret my assignments and give partial credit where possible. Moving forward, I will use it to help me work more efficiently and effectively on all coding projects.
 
 c.) On a scale of 1 (easy) – 10 (hard), how hard was this assignment. If this assignment was hard (> 5),
 please state in one sentence what you struggled with.
+This assignment was a 1.
 
 
